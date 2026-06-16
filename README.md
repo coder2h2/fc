@@ -77,17 +77,48 @@ The workspace provides the following native bindings and integration files:
 
 ---
 
-## Python API: `fc.link($PATH)`
+## 🚀 Python API & Usage Examples
 
-In your Python code, you can import `fc` and link files dynamically:
+### 1. Basic Linking
+Import `fc` and programmatically link any file type directly into your Python namespace:
+
 ```python
 import fc
 
-# Programmatically link any file type by path
+# Link files dynamically (compiles native code behind the scenes)
 demo_c = fc.link("main.c")
 demo_rs = fc.link("main.rs")
-demo_html = fc.link("demo.html")
+config = fc.link("settings.json")
+styles = fc.link("theme.css")
 
-# Call compiled functions directly!
-# print(demo_c.add(10, 20))
+# 1. Call native compiled functions directly in memory
+result = demo_c.add_numbers(10, 20)
+
+# 2. Access parsed JSON/YAML data directly as attributes
+db_host = config.database["host"]
+
+# 3. Access parsed CSS selectors as attributes
+container_styles = styles.container
+print(container_styles["display"])  # e.g., "flex"
+```
+
+### 2. Multi-Language Pipeline (Signaling Any-to-Any)
+Use Python to coordinate execution across multiple programming languages natively:
+
+```python
+import fc
+
+# Load different language modules
+data_fetcher = fc.link("fetch_data.js")  # JavaScript script runner
+c_processor = fc.link("process.c")        # C native compiled library
+rust_writer = fc.link("write_log.rs")     # Rust native compiled library
+
+# Step 1: Run JavaScript runner to retrieve API data
+json_data = data_fetcher.run()
+
+# Step 2: Pass output to a C function to parse/compute in memory
+computed_value = c_processor.compute_metrics(json_data)
+
+# Step 3: Trigger a Rust library function to save the final log
+success = rust_writer.log_result(computed_value)
 ```
