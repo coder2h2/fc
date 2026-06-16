@@ -6,6 +6,29 @@ This workspace has been cleaned of temporary demo files. Instead, it provides na
 
 ---
 
+## 📦 Installation & Setup
+
+### 1. Global Installation (Python Importer)
+To install the core FileConnect import engine globally in your active Python environment:
+```bash
+pip install -e .
+```
+
+### 2. Copying Libraries to a Target Project Workspace
+To copy the native library bindings (`fc.js`, `fc.rs`, `fc.java`, etc.) directly into a target project workspace, use the provided installation script:
+```bash
+./install_fc.sh <target_project_directory>
+```
+This will set up the respective wrappers under:
+* `your_project/fc/` (Python Package)
+* `your_project/libs/js/fc.js` (JavaScript/Node/TS)
+* `your_project/libs/rust/fc.rs` (Rust)
+* `your_project/libs/cpp/fc.h` & `fc.c` (C/C++)
+* `your_project/libs/java/fc.java` (Java)
+* `your_project/libs/csharp/fc.cs` (C#)
+
+---
+
 ## 🎨 Importing `fc` in Programming Languages
 
 The workspace provides the following native bindings and integration files:
