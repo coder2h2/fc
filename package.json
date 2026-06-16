@@ -1,0 +1,93 @@
+{
+  "name": "fc",
+  "displayName": "FileConnect",
+  "description": "Dynamically links Python files to all programming languages and formats (C, C++, Rust, Go, C#, Java, JS, TS, HTML, CSS, SQL, JSON, etc.) in the workspace, featuring interactive visual graphs, CodeLenses, and quick-jump document links.",
+  "version": "1.0.0",
+  "publisher": "ip-ascii",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Other",
+    "Visualization",
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "onLanguage:python",
+    "onView:fileconnect.visualizerView"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "fileconnect.showVisualizer",
+        "title": "FileConnect: Show Relationship Graph",
+        "category": "FileConnect"
+      },
+      {
+        "command": "fileconnect.openFile",
+        "title": "FileConnect: Open File",
+        "category": "FileConnect"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "fileconnect-sidebar",
+          "title": "FileConnect",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "fileconnect-sidebar": [
+        {
+          "type": "webview",
+          "id": "fileconnect.visualizerView",
+          "name": "File Relationships"
+        }
+      ]
+    },
+    "menus": {
+      "editor/context": [
+        {
+          "when": "resourceLangId == python",
+          "command": "fileconnect.showVisualizer",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "FileConnect",
+      "properties": {
+        "fileconnect.scanDepth": {
+          "type": "integer",
+          "default": 3,
+          "description": "Maximum folder depth to scan when searching for matching base name files."
+        },
+        "fileconnect.showCodeLens": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable FileConnect CodeLens above detected file references in Python code."
+        },
+        "fileconnect.excludedFolders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "node_modules",
+            ".git",
+            "__pycache__",
+            ".venv",
+            "venv",
+            "env",
+            "dist",
+            "build"
+          ],
+          "description": "List of folders to exclude from scans."
+        }
+      }
+    }
+  }
+}

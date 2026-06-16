@@ -1,0 +1,25 @@
+# FileConnect gitignore
+
+# Build caches and compilation outputs
+.fc_cache/
+.fc_temp/
+*.so
+*.dll
+*.exe
+*.class
+*.jar
+build/
+dist/
+*.egg-info/
+
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.env
+
+# VS Code project config
+.vscode/

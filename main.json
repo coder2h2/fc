@@ -1,0 +1,26 @@
+{
+  "FileConnect": {
+    "import": "fc",
+    "version": "1.0.0",
+    "configuration": {
+      "cache_directory": ".fc_cache",
+      "languages": [
+        "c",
+        "cpp",
+        "rs",
+        "go",
+        "cs",
+        "java",
+        "js",
+        "ts",
+        "sh",
+        "bash",
+        "php",
+        "ruby",
+        "swift",
+        "kotlin",
+        "haskell"
+      ]
+    }
+  }
+}
