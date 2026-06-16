@@ -24,6 +24,8 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
             --color-json: #eab308;
             --color-yaml: #10b981;
             --color-txt: #64748b;
+            --color-native: #00599c;
+            --color-script: #f1e05a;
             --color-other: #14b8a6;
         }
 
@@ -249,6 +251,8 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
         .color-dot.css { background-color: var(--color-css); }
         .color-dot.sql { background-color: var(--color-sql); }
         .color-dot.config { background-color: var(--color-json); }
+        .color-dot.native { background-color: var(--color-native); }
+        .color-dot.script { background-color: var(--color-script); }
         .color-dot.other { background-color: var(--color-other); }
 
         #toast {
@@ -293,10 +297,11 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
         </div>
         <div class="legend">
             <div class="legend-item"><span class="color-dot py"></span> Python</div>
-            <div class="legend-item"><span class="color-dot html"></span> HTML</div>
-            <div class="legend-item"><span class="color-dot css"></span> CSS</div>
+            <div class="legend-item"><span class="color-dot html"></span> HTML/CSS</div>
             <div class="legend-item"><span class="color-dot sql"></span> SQL</div>
             <div class="legend-item"><span class="color-dot config"></span> Config</div>
+            <div class="legend-item"><span class="color-dot native"></span> Native (C/C++/Rust/Go/Fortran/Asm)</div>
+            <div class="legend-item"><span class="color-dot script"></span> Scripts (JS/TS/Ruby/PHP/Dart/Lisp/R)</div>
             <div class="legend-item"><span class="color-dot other"></span> Other</div>
         </div>
     </div>
@@ -345,6 +350,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 
         function getFileTypeColor(type) {
             const colors = {
+                // Languages requested
                 py: '#387eb8',
                 html: '#e34c26',
                 css: '#264de4',
@@ -353,7 +359,40 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
                 yaml: '#10b981',
                 yml: '#10b981',
                 csv: '#22c55e',
-                txt: '#64748b'
+                txt: '#64748b',
+                // C / C++ / Rust / Go / C# / Java
+                c: '#555555',
+                cpp: '#00599c',
+                cc: '#00599c',
+                rs: '#dea584',
+                go: '#00add8',
+                cs: '#178600',
+                java: '#b07219',
+                js: '#f1e05a',
+                ts: '#3178c6',
+                sh: '#89e051',
+                bash: '#89e051',
+                rb: '#701516',
+                php: '#4f5d95',
+                swift: '#f05138',
+                kt: '#a97bff',
+                hs: '#5e5086',
+                // New formats added
+                cob: '#003366',
+                cbl: '#003366',
+                f: '#4d4dff',
+                for: '#4d4dff',
+                f90: '#4d4dff',
+                lisp: '#3fb68f',
+                lsp: '#3fb68f',
+                cl: '#3fb68f',
+                asm: '#6e4a75',
+                s: '#6e4a75',
+                r: '#198ce7',
+                R: '#198ce7',
+                m: '#e16711',
+                jl: '#a270ba',
+                dart: '#00b4ab'
             };
             return colors[type] || '#14b8a6';
         }

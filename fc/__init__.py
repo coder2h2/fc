@@ -76,7 +76,7 @@ class RunnerModule(types.ModuleType):
 # --- Compile helper functions ---
 
 def compile_native(src_path, ext):
-    """Compile C, C++, Rust, or Go source files into a shared library (.so) with caching."""
+    """Compile C, C++, Rust, Go, Fortran, or Assembly source files into a shared library (.so) with caching."""
     src_mtime = os.path.getmtime(src_path)
     cache_dir = os.path.join(os.path.dirname(src_path), '.fc_cache')
     os.makedirs(cache_dir, exist_ok=True)
@@ -109,6 +109,17 @@ def compile_native(src_path, ext):
         if not shutil.which('go'):
             raise ImportError("Compiler 'go' is required to import Go files.")
         cmd = ['go', 'build', '-buildmode', 'c-shared', '-o', out_path, src_path]
+
+    elif ext in ['.f', '.for', '.f90']:
+        if not shutil.which('gfortran'):
+            raise ImportError("Compiler 'gfortran' is required to import Fortran files.")
+        cmd = ['gfortran', '-shared', '-fPIC', '-o', out_path, src_path]
+
+    elif ext in ['.s', '.asm']:
+        if not shutil.which('gcc') and not shutil.which('clang'):
+            raise ImportError("Compiler 'gcc' or 'clang' is required to compile Assembly files.")
+        cc = 'gcc' if shutil.which('gcc') else 'clang'
+        cmd = [cc, '-shared', '-fPIC', '-o', out_path, src_path]
     else:
         raise ValueError(f"Unsupported compilation extension: {ext}")
 
@@ -214,6 +225,23 @@ def compile_swift(path):
             
     return lambda: [bin_path]
 
+def compile_cobol(path):
+    src_mtime = os.path.getmtime(path)
+    cache_dir = os.path.join(os.path.dirname(path), '.fc_cache')
+    os.makedirs(cache_dir, exist_ok=True)
+    bin_name = os.path.splitext(os.path.basename(path))[0] + '_cob'
+    bin_path = os.path.join(cache_dir, bin_name)
+    
+    if not shutil.which('cobc'):
+        return None
+        
+    if not os.path.exists(bin_path) or os.path.getmtime(bin_path) < src_mtime:
+        proc = subprocess.run(['cobc', '-x', '-o', bin_path, path], capture_output=True, text=True)
+        if proc.returncode != 0:
+            raise RuntimeError(f"COBOL compilation failed:\n{proc.stderr}")
+            
+    return lambda: [bin_path]
+
 # --- FileConnect Import Hooks ---
 
 class FileConnectLoader(importlib.abc.Loader):
@@ -226,8 +254,8 @@ class FileConnectLoader(importlib.abc.Loader):
         module.filepath = self.filepath
         module.extension = self.ext
 
-        # 1. Native libraries (compiled C/C++/Rust/Go)
-        if self.ext in ['.c', '.cpp', '.cc', '.rs', '.go']:
+        # 1. Native libraries (compiled C/C++/Rust/Go/Fortran/Assembly)
+        if self.ext in ['.c', '.cpp', '.cc', '.rs', '.go', '.f', '.for', '.f90', '.s', '.asm']:
             try:
                 so_path = compile_native(self.filepath, self.ext)
                 module.__class__ = NativeModule
@@ -263,7 +291,19 @@ class FileConnectLoader(importlib.abc.Loader):
             '.java': lambda path: compile_java(path),
             '.kt': lambda path: compile_kotlin(path),
             '.hs': lambda path: compile_haskell(path),
-            '.swift': lambda path: compile_swift(path)
+            '.swift': lambda path: compile_swift(path),
+            '.cob': lambda path: compile_cobol(path),
+            '.cbl': lambda path: compile_cobol(path),
+            
+            # Interpreted runners
+            '.lisp': lambda path: ['sbcl', '--script', path] if shutil.which('sbcl') else (['clisp', path] if shutil.which('clisp') else None),
+            '.lsp': lambda path: ['sbcl', '--script', path] if shutil.which('sbcl') else (['clisp', path] if shutil.which('clisp') else None),
+            '.cl': lambda path: ['sbcl', '--script', path] if shutil.which('sbcl') else (['clisp', path] if shutil.which('clisp') else None),
+            '.r': lambda path: ['Rscript', path] if shutil.which('Rscript') else None,
+            '.R': lambda path: ['Rscript', path] if shutil.which('Rscript') else None,
+            '.m': lambda path: ['octave', '-q', path] if shutil.which('octave') else (['matlab', '-batch', f"run('{path}')"] if shutil.which('matlab') else None),
+            '.jl': lambda path: ['julia', path] if shutil.which('julia') else None,
+            '.dart': lambda path: ['dart', 'run', path] if shutil.which('dart') else (['dart', path] if shutil.which('dart') else None),
         }
 
         if self.ext in runners:
@@ -332,6 +372,35 @@ class FileConnectLoader(importlib.abc.Loader):
                 return result
             module.render = render
 
+        elif self.ext == '.css':
+            module.text = content
+            module.content = content
+            module.lines = content.splitlines()
+            rules = {}
+            try:
+                # Remove comments
+                css_clean = re.sub(r'/\*.*?\*/', '', content, flags=re.DOTALL)
+                blocks = re.findall(r'([^{]+)\{([^}]+)\}', css_clean)
+                for selector, body in blocks:
+                    selector = selector.strip()
+                    if not selector: continue
+                    props = {}
+                    for line in body.split(';'):
+                        if ':' in line:
+                            k, v = line.split(':', 1)
+                            props[k.strip()] = v.strip()
+                    if props:
+                        rules[selector] = props
+                module.rules = rules
+                module.data = rules
+                # Expose selectors with valid python identifier names as attributes
+                for sel, props in rules.items():
+                    attr_name = re.sub(r'[^a-zA-Z0-9_]', '_', sel).strip('_')
+                    if attr_name and not attr_name[0].isdigit():
+                        setattr(module, attr_name, props)
+            except Exception as e:
+                module.error = e
+
         elif self.ext in ['.yaml', '.yml']:
             module.text = content
             try:
@@ -382,7 +451,22 @@ class FileConnectFinder(importlib.abc.MetaPathFinder):
             '_php': '.php',
             '_swift': '.swift',
             '_kt': '.kt',
-            '_hs': '.hs'
+            '_hs': '.hs',
+            '_cob': '.cob',
+            '_cbl': '.cbl',
+            '_f': '.f',
+            '_for': '.for',
+            '_f90': '.f90',
+            '_lisp': '.lisp',
+            '_lsp': '.lsp',
+            '_cl': '.cl',
+            '_asm': '.asm',
+            '_s': '.s',
+            '_r': '.r',
+            '_R': '.R',
+            '_m': '.m',
+            '_jl': '.jl',
+            '_dart': '.dart'
         }
 
         target_ext = None
@@ -395,7 +479,10 @@ class FileConnectFinder(importlib.abc.MetaPathFinder):
 
         search_dirs = path if path else sys.path
         if not path:
-            search_dirs = [os.getcwd()] + sys.path
+            search_dirs = [os.getcwd()] + [
+                p for p in sys.path 
+                if p and not any(x in p for x in ['/usr/lib', '/usr/local/lib', '/lib/', 'site-packages', 'dist-packages', '.zip'])
+            ]
 
         for directory in search_dirs:
             if not directory or not os.path.isdir(directory):
@@ -409,7 +496,9 @@ class FileConnectFinder(importlib.abc.MetaPathFinder):
                 extensions = ['.json', '.csv', '.sql', '.html', '.css', '.txt', 
                               '.yaml', '.yml', '.rs', '.go', '.c', '.cpp', '.cs',
                               '.java', '.js', '.ts', '.sh', '.bash', '.py', '.rb',
-                              '.php', '.swift', '.kt', '.hs']
+                              '.php', '.swift', '.kt', '.hs', '.cob', '.cbl', 
+                              '.f', '.for', '.f90', '.lisp', '.lsp', '.cl', 
+                              '.asm', '.s', '.r', '.R', '.m', '.jl', '.dart']
                 for ext in extensions:
                     candidates.append((name + ext, ext))
 

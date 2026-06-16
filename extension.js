@@ -5,7 +5,9 @@ const path = require('path');
 const SUPPORTED_EXTENSIONS = [
     'json', 'csv', 'sql', 'html', 'css', 'txt', 'yaml', 'yml', 
     'rs', 'go', 'c', 'cpp', 'cc', 'cs', 'java', 'js', 'ts', 
-    'sh', 'bash', 'py', 'rb', 'php', 'swift', 'kt', 'hs'
+    'sh', 'bash', 'py', 'rb', 'php', 'swift', 'kt', 'hs',
+    'cob', 'cbl', 'f', 'for', 'f90', 'lisp', 'lsp', 'cl', 
+    'asm', 's', 'r', 'R', 'm', 'jl', 'dart'
 ];
 
 let activeWebviewView = null;
@@ -234,11 +236,12 @@ function getWebviewContent(webview, extensionUri) {
                 </div>
                 <div class="legend">
                     <div class="legend-item"><span class="color-dot py"></span> Python</div>
-                    <div class="legend-item"><span class="color-dot html"></span> HTML</div>
-                    <div class="legend-item"><span class="color-dot css"></span> CSS</div>
+                    <div class="legend-item"><span class="color-dot html"></span> HTML/CSS</div>
                     <div class="legend-item"><span class="color-dot sql"></span> SQL</div>
                     <div class="legend-item"><span class="color-dot config"></span> Config</div>
-                    <div class="legend-item"><span class="color-dot other"></span> Native/Other</div>
+                    <div class="legend-item"><span class="color-dot native"></span> Native (C/C++/Rust/Go/Fortran/Asm)</div>
+                    <div class="legend-item"><span class="color-dot script"></span> Scripts (JS/TS/Ruby/PHP/Dart/Lisp/R)</div>
+                    <div class="legend-item"><span class="color-dot other"></span> Other</div>
                 </div>
             </div>
             <script src="${visualizerJsUri}"></script>

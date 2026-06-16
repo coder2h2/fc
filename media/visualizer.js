@@ -92,7 +92,23 @@ function getFileTypeColor(type) {
         php: '#4f5d95',
         swift: '#f05138',
         kt: '#a97bff',
-        hs: '#5e5086'
+        hs: '#5e5086',
+        // New formats added
+        cob: '#003366',
+        cbl: '#003366',
+        f: '#4d4dff',
+        for: '#4d4dff',
+        f90: '#4d4dff',
+        lisp: '#3fb68f',
+        lsp: '#3fb68f',
+        cl: '#3fb68f',
+        asm: '#6e4a75',
+        s: '#6e4a75',
+        r: '#198ce7',
+        R: '#198ce7',
+        m: '#e16711',
+        jl: '#a270ba',
+        dart: '#00b4ab'
     };
     return colors[type] || '#14b8a6';
 }

@@ -16,6 +16,8 @@
     --color-json: #eab308;
     --color-yaml: #10b981;
     --color-txt: #64748b;
+    --color-native: #00599c;
+    --color-script: #f1e05a;
     --color-other: #14b8a6;
 }
 
@@ -250,4 +252,6 @@ body {
 .color-dot.css { background-color: var(--color-css); }
 .color-dot.sql { background-color: var(--color-sql); }
 .color-dot.config { background-color: var(--color-json); }
+.color-dot.native { background-color: var(--color-native); }
+.color-dot.script { background-color: var(--color-script); }
 .color-dot.other { background-color: var(--color-other); }
