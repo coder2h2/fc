@@ -3,7 +3,7 @@
   "displayName": "FileConnect",
   "description": "Dynamically links Python files to all programming languages and formats (C, C++, Rust, Go, C#, Java, JS, TS, HTML, CSS, SQL, JSON, etc.) in the workspace, featuring interactive visual graphs, CodeLenses, and quick-jump document links.",
   "version": "1.0.0",
-  "publisher": "ip-ascii",
+  "publisher": "coder2h2",
   "engines": {
     "vscode": "^1.60.0"
   },

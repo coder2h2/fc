@@ -34,31 +34,31 @@ This will set up the respective wrappers under:
 The workspace provides the following native bindings and integration files:
 
 1. **Python**:
-   - Package: [fc/](file:///home/ip-ascii/fc/fc/)
+   - Package: [fc/](file:///home/coder2h2/fc/fc/)
    - Import syntax: `import fc`
 2. **JavaScript / Node.js**:
-   - Library: [fc.js](file:///home/ip-ascii/fc/fc.js)
-   - Entry point: [main.js](file:///home/ip-ascii/fc/main.js)
+   - Library: [fc.js](file:///home/coder2h2/fc/fc.js)
+   - Entry point: [main.js](file:///home/coder2h2/fc/main.js)
    - Import syntax: `const fc = require('./fc');`
 3. **Rust**:
-   - Module: [fc.rs](file:///home/ip-ascii/fc/fc.rs)
-   - Entry point: [main.rs](file:///home/ip-ascii/fc/main.rs)
+   - Module: [fc.rs](file:///home/coder2h2/fc/fc.rs)
+   - Entry point: [main.rs](file:///home/coder2h2/fc/main.rs)
    - Import syntax: `mod fc;`
 4. **C / C++**:
-   - Header: [fc.h](file:///home/ip-ascii/fc/fc.h)
-   - Implementation: [fc.c](file:///home/ip-ascii/fc/fc.c)
-   - Entry point: [main.c](file:///home/ip-ascii/fc/main.c)
+   - Header: [fc.h](file:///home/coder2h2/fc/fc.h)
+   - Implementation: [fc.c](file:///home/coder2h2/fc/fc.c)
+   - Entry point: [main.c](file:///home/coder2h2/fc/main.c)
    - Import syntax: `#include "fc.h"`
 5. **Java**:
-   - Helper class: [fc.java](file:///home/ip-ascii/fc/fc.java)
-   - Entry point: [Main.java](file:///home/ip-ascii/fc/Main.java)
+   - Helper class: [fc.java](file:///home/coder2h2/fc/fc.java)
+   - Entry point: [Main.java](file:///home/coder2h2/fc/Main.java)
    - Import syntax: `// fc class compiles in the classpath`
 6. **C#**:
-   - Helper class: [fc.cs](file:///home/ip-ascii/fc/fc.cs)
-   - Entry point: [main.cs](file:///home/ip-ascii/fc/main.cs)
+   - Helper class: [fc.cs](file:///home/coder2h2/fc/fc.cs)
+   - Entry point: [main.cs](file:///home/coder2h2/fc/main.cs)
    - Import syntax: `// fc class compiles in the build target`
 7. **JSON**:
-   - Settings entry: [main.json](file:///home/ip-ascii/fc/main.json)
+   - Settings entry: [main.json](file:///home/coder2h2/fc/main.json)
    - Declaration: `"import": "fc"`
 
 ---
@@ -70,7 +70,7 @@ The workspace provides the following native bindings and integration files:
 - **Document Links**: Turns text file path strings inside quotes into standard Ctrl+Clickable links to open the file.
 
 ### How to Run in Development Mode
-1. Open the `/home/ip-ascii/fc` directory in VS Code.
+1. Open the `/home/coder2h2/fc` directory in VS Code.
 2. Press **`F5`** (or go to **Run > Start Debugging**). A new **[Extension Development Host]** window will open.
 3. Open any workspace folder containing Python scripts in the new window.
 4. Click the **FileConnect** icon in the left activity bar to see the live graph, or command-click paths directly in your editor.
