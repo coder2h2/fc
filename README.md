@@ -122,3 +122,82 @@ computed_value = c_processor.compute_metrics(json_data)
 # Step 3: Trigger a Rust library function to save the final log
 success = rust_writer.log_result(computed_value)
 ```
+
+---
+
+## 🛠️ Usage in Other Languages
+
+Here is how to programmatically link and execute files using the native library bindings inside your own project codebase:
+
+### 1. JavaScript / Node.js
+```javascript
+const fc = require('./fc');
+
+// Parse files dynamically
+const config = fc.link("config.json");
+
+// Run Python or shell scripts programmatically
+const result = fc.link("script.py").run("arg1", "arg2");
+```
+
+### 2. Rust
+```rust
+mod fc;
+
+fn main() {
+    // Link text or config files
+    if let Ok(module) = fc::link("config.json") {
+        println!("Content: {}", module.text);
+    }
+    
+    // Execute interpreted script runners
+    if let Ok(output) = fc::link_run("script.py", &["arg1"]) {
+        println!("Output: {}", output);
+    }
+}
+```
+
+### 3. C / C++
+```c
+#include "fc.h"
+
+int main() {
+    // Link text or config files
+    FileConnectModule* m = fc_link("config.json");
+    if (m) {
+        printf("Content: %s\n", m->text);
+        fc_free(m); // Free struct memory
+    }
+    return 0;
+}
+```
+
+### 4. Java
+```java
+public class Main {
+    public static void main(String[] args) {
+        try {
+            // Read files
+            String text = fc.linkText("config.json");
+            
+            // Execute script runners
+            String output = fc.linkRun("script.py", "arg1");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### 5. C#
+```csharp
+class Program {
+    static void Main() {
+        // Read files
+        string text = fc.LinkText("config.json");
+        
+        // Execute script runners
+        string output = fc.LinkRun("script.py", "arg1");
+    }
+}
+```
